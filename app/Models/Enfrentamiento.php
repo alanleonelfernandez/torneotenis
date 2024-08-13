@@ -5,42 +5,37 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Enfrentamiento extends Model
+class Enfrentamiento
 {
-    use HasFactory;
+    public $jugador1;
+    public $jugador2;
+    public $ganador;
 
-    protected $fillable = [
-        'jugador1_id',
-        'jugador2_id',
-        'ganador_id',
-    ];
-
-    public function jugador1()
+    public function __construct($jugador1, $jugador2)
     {
-        return $this->belongsTo(Jugador::class, 'jugador1_id');
-    }
-
-    public function jugador2()
-    {
-        return $this->belongsTo(Jugador::class, 'jugador2_id');
-    }
-
-    public function ganador()
-    {
-        return $this->belongsTo(Jugador::class, 'ganador_id');
+        $this->jugador1 = $jugador1;
+        $this->jugador2 = $jugador2;
     }
 
     public function determinarGanador()
     {
-        $probabilidadJugador1 = $this->jugador1->calcularProbabilidadVictoria();
-        $probabilidadJugador2 = $this->jugador2->calcularProbabilidadVictoria();
+        // Calcula la "fuerza" total de cada jugador
+        $habilidad1 = $this->jugador1->nivel_habilidad + rand(0, 10);
+        $habilidad2 = $this->jugador2->nivel_habilidad + rand(0, 10);
 
-        if ($probabilidadJugador1 > $probabilidadJugador2) {
-            $this->ganador_id = $this->jugador1->id;
+        if ($this->jugador1->genero == 'Masculino') {
+            $habilidad1 += $this->jugador1->fuerza + $this->jugador1->velocidad;
         } else {
-            $this->ganador_id = $this->jugador2->id;
+            $habilidad1 += $this->jugador1->tiempo_reaccion;
         }
 
-        $this->save();
+        if ($this->jugador2->genero == 'Masculino') {
+            $habilidad2 += $this->jugador2->fuerza + $this->jugador2->velocidad;
+        } else {
+            $habilidad2 += $this->jugador2->tiempo_reaccion;
+        }
+
+        // Determina el ganador
+        $this->ganador = $habilidad1 > $habilidad2 ? $this->jugador1 : $this->jugador2;
     }
 }

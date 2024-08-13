@@ -16,7 +16,6 @@ return new class extends Migration
             $table->string('nombre');
             $table->integer('nivel_habilidad');
             $table->enum('genero', ['Masculino', 'Femenino']);
-            // Otros atributos adicionales pueden ser añadidos aquí.
             $table->timestamps();
         });
     }

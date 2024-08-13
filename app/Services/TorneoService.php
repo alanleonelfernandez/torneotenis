@@ -25,19 +25,22 @@ class TorneoService
         return $this->jugadores->first();
     }
 
-    protected function jugarRonda(Collection $jugadores)
+    protected function jugarRonda($jugadores)
     {
         $ganadores = collect();
-
+    
         for ($i = 0; $i < $jugadores->count(); $i += 2) {
-            $enfrentamiento = new Enfrentamiento([
-                'jugador1_id' => $jugadores[$i]->id,
-                'jugador2_id' => $jugadores[$i + 1]->id,
-            ]);
-            $enfrentamiento->determinarGanador();
-            $ganadores->push($enfrentamiento->ganador);
+            // Verifica que existan dos jugadores para emparejar.
+            if (isset($jugadores[$i + 1])) {
+                $enfrentamiento = new Enfrentamiento($jugadores[$i], $jugadores[$i + 1]);
+                $enfrentamiento->determinarGanador();
+                $ganadores->push($enfrentamiento->ganador);
+            } else {
+                // Si hay un jugador sin pareja, avanza automáticamente a la siguiente ronda.
+                $ganadores->push($jugadores[$i]);
+            }
         }
-
+    
         return $ganadores;
     }
 }

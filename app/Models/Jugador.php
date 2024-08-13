@@ -13,6 +13,9 @@ class Jugador extends Model
         'nombre',
         'nivel_habilidad',
         'genero',
+        'fuerza', 
+        'velocidad', 
+        'tiempo_reaccion'
     ];
 
     public function calcularProbabilidadVictoria()
