@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TorneoController;
+use App\Http\Controllers\JugadorController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,3 +21,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::get('/simular-torneo', [TorneoController::class, 'simularTorneo']);
+
+Route::get('/jugadores', [JugadorController::class, 'index']);
+
+Route::get('/historial-torneos', [TorneoController::class, 'historial']);
