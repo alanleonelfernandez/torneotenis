@@ -8,19 +8,23 @@ use Illuminate\Http\Request;
 
 class TorneoController extends Controller
 {
-    public function simularTorneo()
-    {
-        $jugadores = Jugador::all();
-        $torneoService = new TorneoService($jugadores);
-        $ganador = $torneoService->simular();
+    protected $torneoService;
 
-        $torneo = Torneo::create([
-            'nombre' => 'Torneo ' . now()->format('Y-m-d H:i:s'),
-            'genero' => 'Masculino',
-            'ganador_id' => $ganador->id,
-        ]);
-    
-        return response()->json(['ganador' => $ganador->nombre, 'torneo_id' => $torneo->id]);
+    public function __construct(TorneoService $torneoService)
+    {
+        $this->torneoService = $torneoService;
+    }
+
+    public function simularTorneoMasculino()
+    {
+        $ganador = $this->torneoService->simularTorneo('Masculino');
+        return response()->json(['mensaje' => 'Torneo masculino simulado exitosamente', 'ganador' => $ganador]);
+    }
+
+    public function simularTorneoFemenino()
+    {
+        $ganador = $this->torneoService->simularTorneo('Femenino');
+        return response()->json(['mensaje' => 'Torneo femenino simulado exitosamente', 'ganador' => $ganador]);
     }
 
     public function historial()

@@ -17,13 +17,3 @@ use App\Services\TorneoService;
 Route::get('/', function () {
     return view('welcome');
 });
-
-Route::get('/simular-torneo', function () {
-    $jugadores = Jugador::all();
-    $torneo = new TorneoService($jugadores);
-    $ganador = $torneo->simular();
-
-    return response()->json([
-        'ganador' => $ganador->nombre,
-    ]);
-});

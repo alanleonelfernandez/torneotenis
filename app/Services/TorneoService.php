@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Jugador;
 use App\Models\Enfrentamiento;
+use App\Models\Torneo;
 
 use Illuminate\Database\Eloquent\Collection;
 
@@ -16,32 +17,46 @@ class TorneoService
         $this->jugadores = $jugadores;
     }
 
-    public function simular()
+    public function simularTorneo($genero)
     {
-        while ($this->jugadores->count() > 1) {
-            $this->jugadores = $this->jugarRonda($this->jugadores);
+        $jugadores = Jugador::where('genero', $genero)->inRandomOrder()->get();
+
+        if ($jugadores->count() < 2 || $jugadores->count() % 2 !== 0) {
+            throw new \Exception('La cantidad de jugadores debe ser un número par y al menos 2.');
         }
 
-        return $this->jugadores->first();
+        while ($jugadores->count() > 1) {
+            $jugadores = $this->jugarRonda($jugadores);
+        }
+
+        $ganador = $jugadores->first();
+        $torneo = new Torneo([
+            'nombre' => "Torneo de " . strtolower($genero),
+            'genero' => $genero,
+            'ganador_id' => $ganador->id,
+        ]);
+        $torneo->save();
+
+        return $ganador;
     }
 
-    protected function jugarRonda($jugadores)
+    private function jugarRonda($jugadores)
     {
         $ganadores = collect();
-    
+
         for ($i = 0; $i < $jugadores->count(); $i += 2) {
-            // Verifica que existan dos jugadores para emparejar.
-            if (isset($jugadores[$i + 1])) {
-                $enfrentamiento = new Enfrentamiento($jugadores[$i], $jugadores[$i + 1]);
-                $enfrentamiento->determinarGanador();
-                $ganadores->push($enfrentamiento->ganador);
-            } else {
-                // Si hay un jugador sin pareja, avanza automáticamente a la siguiente ronda.
-                $ganadores->push($jugadores[$i]);
-            }
+            $ganadores->push($this->jugarEnfrentamiento($jugadores[$i], $jugadores[$i + 1]));
         }
-    
+
         return $ganadores;
+    }
+
+    private function jugarEnfrentamiento($jugador1, $jugador2)
+    {
+        $puntajeJugador1 = $jugador1->nivel_habilidad * 0.5 + rand(0, 100) * 0.5;
+        $puntajeJugador2 = $jugador2->nivel_habilidad * 0.5 + rand(0, 100) * 0.5;
+        
+        return $puntajeJugador1 > $puntajeJugador2 ? $jugador1 : $jugador2;
     }
 }
 

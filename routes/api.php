@@ -20,7 +20,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('/simular-torneo', [TorneoController::class, 'simularTorneo']);
+Route::get('/simular-torneo-masculino', [TorneoController::class, 'simularTorneoMasculino']);
+
+Route::get('/simular-torneo-femenino', [TorneoController::class, 'simularTorneoFemenino']);
 
 Route::get('/jugadores', [JugadorController::class, 'index']);
 
