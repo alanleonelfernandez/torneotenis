@@ -1,0 +1,54 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "API de Torneos de Tenis",
+        "description": "Documentación de la API para la gestión de torneos de tenis.",
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/jugadores": {
+            "get": {
+                "summary": "Muestra a todos los jugadores(masculinos y femeninos)",
+                "operationId": "93e8e84ce05149424e21af1b85d996b7",
+                "responses": {
+                    "200": {
+                        "description": "Devuelve a todos los tenistas y sus skills(masculinos y femeninos)"
+                    }
+                }
+            }
+        },
+        "/api/simular-torneo-masculino": {
+            "get": {
+                "summary": "Simular un torneo de tenis masculino",
+                "operationId": "5bd8a70337e46e8b3de7f416c12d7782",
+                "responses": {
+                    "200": {
+                        "description": "Devuelve el resultado del torneo simulado"
+                    }
+                }
+            }
+        },
+        "/api/simular-torneo-femenino": {
+            "get": {
+                "summary": "Simular un torneo de tenis femenino",
+                "operationId": "3f0eab2b457b318d328acd2b549fdf98",
+                "responses": {
+                    "200": {
+                        "description": "Devuelve el resultado del torneo simulado"
+                    }
+                }
+            }
+        },
+        "/api/historial-torneos": {
+            "get": {
+                "summary": "Obtener historial de torneos masculinos y/o femeninos",
+                "operationId": "08d7edeea2ca86c89eb3bdd983ea3278",
+                "responses": {
+                    "200": {
+                        "description": "Devuelve el historial de torneos masculinos y/o femeninos"
+                    }
+                }
+            }
+        }
+    }
+}

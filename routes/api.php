@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * @OA\Info(
+ *     title="API de Torneos de Tenis",
+ *     version="1.0.0",
+ *     description="Documentación de la API para la gestión de torneos de tenis."
+ * )
+ */
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TorneoController;
