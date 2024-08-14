@@ -1,66 +1,109 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+<h1>Torneo de Tenis</h1>
 
-## About Laravel
+<p>Este proyecto implementa un sistema para simular torneos de tenis utilizando Laravel 10. Los jugadores pueden participar en torneos masculinos o femeninos, y el sistema selecciona un ganador basado en una combinación de azar, nivel de habilidad, fuerza, velocidad, y tiempo de reacción.</p>
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+<h2>Requisitos Previos</h2>
+<ul>
+    <li>PHP 8.1 o superior</li>
+    <li>Composer</li>
+    <li>SQLite (o cualquier otra base de datos configurada)</li>
+    <li>Node.js (para compilar assets si es necesario)</li>
+    <li>Git</li>
+</ul>
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+<h2>Instalación</h2>
+<ol>
+    <li><strong>Clonar el repositorio:</strong>
+        <pre><code>git clone https://github.com/alanleonelfernandez/torneotenis.git
+cd torneotenis
+        </code></pre>
+    </li>
+    <li><strong>Instalar dependencias de PHP:</strong>
+        <pre><code>composer install
+        </code></pre>
+    </li>
+    <li><strong>Configurar las variables de entorno:</strong>
+        <p>Copia el archivo <code>.env.example</code> a <code>.env</code>:</p>
+        <pre><code>cp .env.example .env
+        </code></pre>
+        <p>Luego, genera una clave de aplicación:</p>
+        <pre><code>php artisan key:generate
+        </code></pre>
+    </li>
+    <li><strong>Configurar la base de datos:</strong>
+        <p>En el archivo <code>.env</code>, configura la conexión a la base de datos. Si usas SQLite, puedes simplemente crear un archivo de base de datos:</p>
+        <pre><code>touch database/database.sqlite
+        </code></pre>
+        <p>Luego, corre las migraciones y los seeders:</p>
+        <pre><code>php artisan migrate --seed
+        </code></pre>
+        <p>Esto llenará la base de datos con 16 jugadores predefinidos.</p>
+        <p>En caso de tener problemas de conexion de base de datos, podemos optar por configurar la ruta de database.sqlite manualmente en el .env. Por ejemplo:</p>
+        <pre><code>DB_CONNECTION=sqlite
+DB_DATABASE={ruta local hacia el proyecto}/torneotenis/database/database.sqlite
+        </code></pre>
+    </li>
+    <li><strong>Compilar assets (si aplica):</strong>
+        <pre><code>npm install && npm run dev
+        </code></pre>
+    </li>
+    <li><strong>Iniciar el servidor:</strong>
+        <pre><code>php artisan serve
+        </code></pre>
+        <p>La aplicación estará disponible en <a href="http://localhost:8000">http://localhost:8000</a>.(puede variar segun configuracion local)</p>
+    </li>
+</ol>
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+<h2>Uso</h2>
 
-## Learning Laravel
+<h3>Rutas de la API</h3>
+<ul>
+    <li><strong>Simular Torneo Masculino:</strong>
+        <pre><code>GET /api/simular-torneo-masculino
+        </code></pre>
+    </li>
+    <li><strong>Simular Torneo Femenino:</strong>
+        <pre><code>GET /api/simular-torneo-femenino
+        </code></pre>
+    </li>
+    <li><strong>Listar Jugadores:</strong>
+        <pre><code>GET /api/jugadores
+        </code></pre>
+    </li>
+    <li><strong>Ver Historial de Torneos:</strong>
+        <pre><code>GET /api/historial-torneos
+        </code></pre>
+    </li>
+</ul>
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+<h3>Documentación de la API</h3>
+<p>La API está documentada usando Swagger. Puedes generar la documentación utilizando el siguiente comando:</p>
+<pre><code>php artisan l5-swagger:generate
+</code></pre>
+<p>La documentación estará disponible en <a href="http://localhost:8000/api/documentation">http://localhost:8000/api/documentation</a>.</p>
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+<h3>Agregar Jugadores desde la Consola</h3>
+<p>Puedes agregar jugadores directamente desde la consola utilizando Tinker. Ejemplo:</p>
+<pre><code>php artisan tinker
+</code></pre>
+<p>En el entorno interactivo de Tinker:</p>
+<pre><code>$jugador = new App\Models\Jugador;
+$jugador->nombre = 'Nuevo Jugador';
+$jugador->nivel_habilidad = 75;
+$jugador->genero = 'Masculino';
+$jugador->fuerza = 80;
+$jugador->velocidad = 70;
+$jugador->tiempo_reaccion = 65;
+$jugador->save();
+</code></pre>
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
-
-## Laravel Sponsors
-
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
-
-### Premium Partners
-
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+</body>
+</html>
