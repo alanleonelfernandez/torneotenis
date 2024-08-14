@@ -53,9 +53,25 @@ class TorneoService
 
     private function jugarEnfrentamiento($jugador1, $jugador2)
     {
-        $puntajeJugador1 = $jugador1->nivel_habilidad * 0.5 + rand(0, 100) * 0.5;
-        $puntajeJugador2 = $jugador2->nivel_habilidad * 0.5 + rand(0, 100) * 0.5;
-        
+        //40% definido por azar, 30% definido por nivel de habilidad
+        $azarJugador1 = rand(0, 100) * 0.4;
+        $azarJugador2 = rand(0, 100) * 0.4;
+        $habilidadJugador1 = $jugador1->nivel_habilidad * 0.3;
+        $habilidadJugador2 = $jugador2->nivel_habilidad * 0.3;
+    
+        // Masculino: 15% fuerza, 15% velocidad
+        // Femenino: 10% fuerza, 10% velocidad, 10% reacción
+        if ($jugador1->genero === 'Masculino') {
+            $extraJugador1 = $jugador1->fuerza * 0.15 + $jugador1->velocidad * 0.15;
+            $extraJugador2 = $jugador2->fuerza * 0.15 + $jugador2->velocidad * 0.15;
+        } else {
+            $extraJugador1 = $jugador1->fuerza * 0.1 + $jugador1->velocidad * 0.1 + $jugador1->tiempo_reaccion * 0.1;
+            $extraJugador2 = $jugador2->fuerza * 0.1 + $jugador2->velocidad * 0.1 + $jugador2->tiempo_reaccion * 0.1;
+        }
+    
+        $puntajeJugador1 = $azarJugador1 + $habilidadJugador1 + $extraJugador1;
+        $puntajeJugador2 = $azarJugador2 + $habilidadJugador2 + $extraJugador2;
+    
         return $puntajeJugador1 > $puntajeJugador2 ? $jugador1 : $jugador2;
     }
 }
